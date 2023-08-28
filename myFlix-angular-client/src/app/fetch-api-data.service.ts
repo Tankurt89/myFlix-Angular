@@ -20,6 +20,23 @@ export class UserRegistrationService {
       catchError(this.handleError)
     )
   }
+
+  getAllMovies(): Observable<any> {
+    const token = localStorage.getItem('token')
+    return this.http.get(apiUrl + 'movies', {headers: new HttpHeaders(
+      {
+        Authorization: 'Bearer ' + token,
+      })}).pipe(
+        map(this.extractResponseData),
+        catchError(this.handleError)
+      )
+  }
+
+  private extractResponseData(res: Response): any {
+    const body = res;
+    return body || { }
+  }
+
   private handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
       console.error('Some error occurred:', error.error.message)
