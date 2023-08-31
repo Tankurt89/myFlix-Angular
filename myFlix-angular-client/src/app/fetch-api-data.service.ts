@@ -142,7 +142,7 @@ export class UserRegistrationService {
       )
   }
   // end code for the api endpoints
-  private extractResponseData(res: Response): any {
+  private extractResponseData(res: Object): any {
     const body = res;
     return body || { }
   }
