@@ -35,29 +35,31 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
-  openGenreDialog(Genre: any): void {
+  openGenreDialog(movie: any): void {
     this.dialog.open(MovieDetailsComponent, {
       data: {
-        Name: Genre.Name,
-        Description: Genre.Description,
+        Name: movie.Genre.Name,
+        Description: movie.Genre.Description,
       }
     })
   }
 
-  openSynopsisDialog(synopsis: string): void {
+  openSynopsisDialog(movie: any): void {
     this.dialog.open(MovieDetailsComponent, {
       data: {
-        title: "Description",
-        content: synopsis,
+        Name: "Description",
+        Description: movie.Description,
       }
     })
   }
 
-  openDirectorDialog(director: any): void {
+  openDirectorDialog(movie: any): void {
     this.dialog.open(MovieDetailsComponent, {
       data: {
-        title: director.Name,
-        content: director.Bio,
+        Name: movie.Director.Name,
+        Description: movie.Director.Bio,
+        Birth: movie.Director.Birth,
+        Death: movie.Director.Death
       }
     })
   }

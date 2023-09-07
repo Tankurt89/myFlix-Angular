@@ -9,8 +9,10 @@ export class MovieDetailsComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      title: string,
-      content: string,
+      Name: string,
+      Description: string,
+      Birth: string,
+      Death: string
     }
   ) { }
 
