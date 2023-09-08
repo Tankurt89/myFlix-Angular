@@ -73,9 +73,10 @@ export class UserRegistrationService {
   }
 
   getOneUser(): Observable<any> {
-    const username = localStorage.getItem('Username');
+    const username = localStorage.getItem('user') || "";
     const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + `users/${username}`, {
+    const fixUser = username.replace(/['"]+/g, '') //added to remove the quotes from local storage because it was adding quotes
+    return this.http.get(apiUrl + "users/" + fixUser, {
       headers: new HttpHeaders(
         {
           Authorization: 'Bearer ' + token,
@@ -101,7 +102,6 @@ export class UserRegistrationService {
   addFavoriteMovie(movieId: string): Observable<any> {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-
     user.FavoriteMovies.push(movieId);
     localStorage.setItem('user', JSON.stringify(user));
     
@@ -148,7 +148,7 @@ export class UserRegistrationService {
   editUser(updateUser: any): Observable<any>{
     const user = JSON.parse(localStorage.getItem('user') || '{}')
     const token = localStorage.getItem('token')
-    return this.http.put(apiUrl + 'users/' + user.Username, updateUser, {headers: new HttpHeaders(
+    return this.http.put(apiUrl + 'users/' + `${user}`, updateUser, {headers: new HttpHeaders(
       {
         Authorization: 'Bearer ' + token,
       })}).pipe(
