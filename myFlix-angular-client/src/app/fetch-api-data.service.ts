@@ -22,7 +22,6 @@ export class UserRegistrationService {
   }
 
   public userLogin(userDetails: any): Observable<any> {
-    console.log(userDetails)
     return this.http.post(apiUrl + 'login?' + new URLSearchParams(userDetails), {}).pipe(
       catchError(this.handleError)
     )
@@ -73,7 +72,7 @@ export class UserRegistrationService {
   }
 
   getOneUser(): Observable<any> {
-    const username = localStorage.getItem('user') || "";
+    const username = localStorage.getItem('user') || '';
     const token = localStorage.getItem('token');
     const fixUser = username.replace(/['"]+/g, '') //added to remove the quotes from local storage because it was adding quotes
     return this.http.get(apiUrl + "users/" + fixUser, {
@@ -87,63 +86,66 @@ export class UserRegistrationService {
     );
   }
 
-  getFavoriteMovie(username: string): Observable<any>{
-    const token = localStorage.getItem('token')
-    return this.http.get(apiUrl + `users/${username}`, {headers: new HttpHeaders(
-      {
-        Authorization: 'Bearer ' + token,
-      })}).pipe(
-        map(this.extractResponseData),
-        map((data) => data.FavoriteMovies),
-        catchError(this.handleError)
-      )
-  }
+  getFavoriteMovies(): Observable<any> {
+		const user = JSON.parse(localStorage.getItem("user") || "{}");
+		const token = localStorage.getItem("token");
+		return this.http
+			.get(apiUrl + "users/" + user.Username, {
+				headers: new HttpHeaders({
+					Authorization: "Bearer " + token,
+				}),
+			})
+			.pipe(
+				map(this.extractResponseData),
+				map((data) => data.FavoriteMovies),
+				catchError(this.handleError)
+			);
+	}
 
   addFavoriteMovie(movieId: string): Observable<any> {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    user.FavoriteMovies.push(movieId);
-    localStorage.setItem('user', JSON.stringify(user));
-    
-    return this.http.put(apiUrl + `users/${user.Username}/${movieId}`, {}, {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: 'Bearer ' + token,
-      })
-    }).pipe(
-      map(this.extractResponseData),
-      catchError(this.handleError),
-    );
-  }
+		const user = JSON.parse(localStorage.getItem("user") || "{}");
+		const token = localStorage.getItem("token");
+		user.FavoriteMovies.push(movieId);
+		localStorage.setItem("user", JSON.stringify(user));
+		return this.http
+			.post(
+				apiUrl + "users/" + user.Username + "/movies/" + movieId,
+				{},
+				{
+					headers: new HttpHeaders({
+						Authorization: "Bearer " + token,
+					}),
+					responseType: "text",
+				}
+			)
+			.pipe(map(this.extractResponseData), catchError(this.handleError));
+	}
+
+	isFavoriteMovie(movieId: string): boolean {
+		const user = JSON.parse(localStorage.getItem("user") || "{}");
+		return user.FavoriteMovies.indexOf(movieId) >= 0;
+	}
 
   deleteFavoriteMovie(movieId: string): Observable<any> {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+		const user = JSON.parse(localStorage.getItem("user") || "{}");
+		const token = localStorage.getItem("token");
 
-    const index = user.FavoriteMovies.indexOf(movieId);
-    if (index >= 0) {
-      user.FavoriteMovies.splice(index, 1);
-    }
-    localStorage.setItem('user', JSON.stringify(user));
+		const index = user.FavoriteMovies.indexOf(movieId);
+		console.log(index);
+		if (index > -1) {
+			user.FavoriteMovies.splice(index, 1);
+		}
+		localStorage.setItem("user", JSON.stringify(user));
+		return this.http
+			.delete(apiUrl + "users/" + user.Username + "/movies/" + movieId, {
+				headers: new HttpHeaders({
+					Authorization: "Bearer " + token,
+				}),
+				responseType: "text",
+			})
+			.pipe(map(this.extractResponseData), catchError(this.handleError));
+	}
 
-    return this.http.delete(apiUrl + `users/${user.Username}/${movieId}`, {
-      headers: new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-      })
-    }).pipe(
-      map(this.extractResponseData),
-      catchError(this.handleError)
-    );
-  }
-
-  isFavoriteMovie(movieId: string): boolean {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (user) {
-      return user.FavoriteMovies.includes(movieId);
-    }
-
-    return false;
-  }
 
   editUser(updateUser: any): Observable<any>{
     const user = JSON.parse(localStorage.getItem('user') || '{}')
