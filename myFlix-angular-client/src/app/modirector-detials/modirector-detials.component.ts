@@ -1,16 +1,19 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 @Component({
-  selector: 'app-movie-details',
-  templateUrl: './movie-details.component.html',
-  styleUrls: ['./movie-details.component.scss']
+  selector: 'app-modirector-detials',
+  templateUrl: './modirector-detials.component.html',
+  styleUrls: ['./modirector-detials.component.scss']
 })
-export class MovieDetailsComponent implements OnInit {
+export class ModirectorDetialsComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: {
       Name: string,
       Description: string,
+      Birth: string,
+      Death: string
     }
   ) { }
 

@@ -23,7 +23,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
-import { MatListModule } from '@angular/material/list'
+import { MatListModule } from '@angular/material/list';
+import { ModirectorDetialsComponent } from './modirector-detials/modirector-detials.component'
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent},
@@ -41,6 +42,7 @@ const appRoutes: Routes = [
     NavbarComponent,
     ProfilePageComponent,
     MovieDetailsComponent,
+    ModirectorDetialsComponent,
   ],
   imports: [
     BrowserModule,

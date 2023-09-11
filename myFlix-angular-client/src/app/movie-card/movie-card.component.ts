@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MovieDetailsComponent } from '../movie-details/movie-details.component';
 import { Router } from '@angular/router';
+import { ModirectorDetialsComponent } from '../modirector-detials/modirector-detials.component';
 
 @Component({
   selector: 'app-movie-card',
@@ -54,12 +55,12 @@ export class MovieCardComponent implements OnInit {
   }
 
   openDirectorDialog(movie: any): void {
-    this.dialog.open(MovieDetailsComponent, {
+    this.dialog.open(ModirectorDetialsComponent, {
       data: {
         Name: movie.Director.Name,
         Description: movie.Director.Bio,
         Birth: movie.Director.Birth,
-        Death: movie.Director.Death
+        Death: movie
       }
     })
   }
@@ -77,6 +78,7 @@ export class MovieCardComponent implements OnInit {
   }
 
   addFavorite(movie: string): void {
+    console.log(movie)
     this.fetchApiData.addFavoriteMovie(movie).subscribe(() => {
       this.snackBar.open('added to favorites', 'OK', {
         duration: 2000
